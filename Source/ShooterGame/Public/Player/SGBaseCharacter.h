@@ -25,6 +25,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Movement")
 	bool IsSprinting() const;
 
+	UFUNCTION(BlueprintCallable, Category="Movement")
+	float GetMovementDirection() const;
+
 protected:
 	virtual void BeginPlay() override;
 

@@ -5,6 +5,8 @@
 
 #include "GameFramework/CharacterMovementComponent.h"
 
+#include <windows/PxWindowsIntrinsics.h>
+
 ASGBaseCharacter::ASGBaseCharacter(const FObjectInitializer& ObjInit)
 	: Super(ObjInit.SetDefaultSubobjectClass<USGCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
@@ -44,6 +46,21 @@ bool ASGBaseCharacter::IsSprinting() const
 	return WantToSprint && IsMovingForward && !GetVelocity().IsZero();
 }
 
+float ASGBaseCharacter::GetMovementDirection() const
+{
+	if (!GetVelocity().IsZero())
+	{
+		const FVector VelocityNormal = GetVelocity().GetSafeNormal();
+		const float AngleBetween = FMath::Acos(FVector::DotProduct(GetActorForwardVector(), VelocityNormal));
+		const FVector CrossProduct = FVector::CrossProduct(GetActorForwardVector(), VelocityNormal);
+		const float Degrees = FMath::RadiansToDegrees(AngleBetween);
+
+		return CrossProduct.IsZero() ? Degrees : Degrees * FMath::Sign(CrossProduct.Z);
+	}
+
+	return 0.0f;
+}
+
 void ASGBaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
@@ -51,13 +68,19 @@ void ASGBaseCharacter::BeginPlay()
 
 void ASGBaseCharacter::MoveForward(float Amount)
 {
-	IsMovingForward = Amount > 0;
-	AddMovementInput(GetActorForwardVector(), Amount);
+	if (!Amount == 0)
+	{
+		IsMovingForward = Amount > 0;
+		AddMovementInput(GetActorForwardVector(), Amount);
+	}
 }
 
 void ASGBaseCharacter::MoveRight(float Amount)
 {
-	AddMovementInput(GetActorRightVector(), Amount);
+	if (!Amount == 0)
+	{
+		AddMovementInput(GetActorRightVector(), Amount);
+	}
 }
 
 void ASGBaseCharacter::LookUp(float Amount)
