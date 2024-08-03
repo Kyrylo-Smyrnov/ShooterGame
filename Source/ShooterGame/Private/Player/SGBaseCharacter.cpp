@@ -7,8 +7,12 @@ ASGBaseCharacter::ASGBaseCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	SpringArmComponent = CreateDefaultSubobject<USpringArmComponent>("SpringArmComponent");
+	SpringArmComponent->SetupAttachment(GetRootComponent());
+	SpringArmComponent->bUsePawnControlRotation = true;
+
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("CameraComponent");
-	CameraComponent->SetupAttachment(GetRootComponent());
+	CameraComponent->SetupAttachment(SpringArmComponent);
 }
 
 void ASGBaseCharacter::Tick(float DeltaTime)
@@ -22,6 +26,9 @@ void ASGBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &ASGBaseCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &ASGBaseCharacter::MoveRight);
+
+	PlayerInputComponent->BindAxis("LookUp", this, &ASGBaseCharacter::LookUp);
+	PlayerInputComponent->BindAxis("TurnAround", this, &ASGBaseCharacter::TurnAround);
 }
 
 void ASGBaseCharacter::BeginPlay()
@@ -37,4 +44,14 @@ void ASGBaseCharacter::MoveForward(float Amount)
 void ASGBaseCharacter::MoveRight(float Amount)
 {
 	AddMovementInput(GetActorRightVector(), Amount);
+}
+
+void ASGBaseCharacter::LookUp(float Amount)
+{
+	AddControllerPitchInput(Amount);
+}
+
+void ASGBaseCharacter::TurnAround(float Amount)
+{
+	AddControllerYawInput(Amount);
 }
