@@ -4,6 +4,7 @@
 
 #include "Camera/CameraComponent.h"
 #include "Components/InputComponent.h"
+#include "Components/SGCharacterMovementComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -15,11 +16,14 @@ class SHOOTERGAME_API ASGBaseCharacter : public ACharacter
 	GENERATED_BODY()
 
 public:
-	ASGBaseCharacter();
+	ASGBaseCharacter(const FObjectInitializer& ObjInit);
 
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintCallable, Category="Movement")
+	bool IsSprinting() const;
 
 protected:
 	virtual void BeginPlay() override;
@@ -36,4 +40,10 @@ private:
 
 	void LookUp(float Amount);
 	void TurnAround(float Amount);
+
+	void OnBeginSprint();
+	void OnEndSprint();
+
+	bool IsMovingForward = false;
+	bool WantToSprint = false;
 };

@@ -3,7 +3,10 @@
 
 #include "Player/SGBaseCharacter.h"
 
-ASGBaseCharacter::ASGBaseCharacter()
+#include "GameFramework/CharacterMovementComponent.h"
+
+ASGBaseCharacter::ASGBaseCharacter(const FObjectInitializer& ObjInit)
+	: Super(ObjInit.SetDefaultSubobjectClass<USGCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	PrimaryActorTick.bCanEverTick = true;
 
@@ -29,6 +32,16 @@ void ASGBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAxis("LookUp", this, &ASGBaseCharacter::LookUp);
 	PlayerInputComponent->BindAxis("TurnAround", this, &ASGBaseCharacter::TurnAround);
+
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ASGBaseCharacter::Jump);
+
+	PlayerInputComponent->BindAction("Sprint", IE_Pressed, this, &ASGBaseCharacter::OnBeginSprint);
+	PlayerInputComponent->BindAction("Sprint", IE_Released, this, &ASGBaseCharacter::OnEndSprint);
+}
+
+bool ASGBaseCharacter::IsSprinting() const
+{
+	return WantToSprint && IsMovingForward && !GetVelocity().IsZero();
 }
 
 void ASGBaseCharacter::BeginPlay()
@@ -38,6 +51,7 @@ void ASGBaseCharacter::BeginPlay()
 
 void ASGBaseCharacter::MoveForward(float Amount)
 {
+	IsMovingForward = Amount > 0;
 	AddMovementInput(GetActorForwardVector(), Amount);
 }
 
@@ -54,4 +68,14 @@ void ASGBaseCharacter::LookUp(float Amount)
 void ASGBaseCharacter::TurnAround(float Amount)
 {
 	AddControllerYawInput(Amount);
+}
+
+void ASGBaseCharacter::OnBeginSprint()
+{
+	WantToSprint = true;
+}
+
+void ASGBaseCharacter::OnEndSprint()
+{
+	WantToSprint = false;
 }
