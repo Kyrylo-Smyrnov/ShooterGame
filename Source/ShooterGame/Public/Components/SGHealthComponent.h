@@ -2,27 +2,30 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CoreMinimal.h"
 #include "SGHealthComponent.generated.h"
 
-
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SHOOTERGAME_API USGHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
+  public:
 	USGHealthComponent();
 
 	float GetHealth() const;
 
-protected:
+  protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta=(ClampMin = 1.0f, ClampMax = 100.0f), Category="Health");
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = 1.0f, ClampMax = 100.0f), Category = "Health");
 	float MaxHealth = 100.0f;
 
-private:
+  private:
+	UFUNCTION()
+	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType,
+						 class AController* InstigatedBy, AActor* DamageCauser);
+
 	float Health = 0.0f;
 };

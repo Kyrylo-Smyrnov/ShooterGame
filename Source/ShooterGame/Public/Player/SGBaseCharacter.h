@@ -17,20 +17,20 @@ class SHOOTERGAME_API ASGBaseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
-public:
+  public:
 	ASGBaseCharacter(const FObjectInitializer& ObjInit);
 
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UFUNCTION(BlueprintCallable, Category="Movement")
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	bool IsSprinting() const;
 
-	UFUNCTION(BlueprintCallable, Category="Movement")
+	UFUNCTION(BlueprintCallable, Category = "Movement")
 	float GetMovementDirection() const;
 
-protected:
+  protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
@@ -45,7 +45,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* HealthTextComponent;
 
-private:
+  private:
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
 

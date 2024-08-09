@@ -7,17 +7,14 @@
 #include "Player/SGBaseCharacter.h"
 #include "SGCharacterMovementComponent.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class SHOOTERGAME_API USGCharacterMovementComponent : public UCharacterMovementComponent
 {
 	GENERATED_BODY()
 
-public:
+  public:
 	virtual float GetMaxSpeed() const override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Movement", meta=(ClampMin = 1.0f, ClampMax = 10.0f));
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Movement", meta = (ClampMin = 1.0f, ClampMax = 10.0f));
 	float SprintModifier = 1.5;
 };

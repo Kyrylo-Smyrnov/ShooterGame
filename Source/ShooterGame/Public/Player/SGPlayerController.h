@@ -6,12 +6,8 @@
 #include "GameFramework/PlayerController.h"
 #include "SGPlayerController.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class SHOOTERGAME_API ASGPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-	
 };

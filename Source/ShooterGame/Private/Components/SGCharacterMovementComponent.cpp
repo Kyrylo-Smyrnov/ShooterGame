@@ -1,6 +1,5 @@
 // https://github.com/Kyrylo-Smyrnov/ShooterGame
 
-
 #include "Components/SGCharacterMovementComponent.h"
 
 float USGCharacterMovementComponent::GetMaxSpeed() const
