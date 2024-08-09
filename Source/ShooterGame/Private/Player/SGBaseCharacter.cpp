@@ -25,8 +25,6 @@ void ASGBaseCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	const auto Health = HealthComponent->GetHealth();
 	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
-
-	TakeDamage(0.1f, FDamageEvent(), Controller, this);
 }
 
 void ASGBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

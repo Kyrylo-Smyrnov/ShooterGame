@@ -2,6 +2,8 @@
 
 #include "Components/SGHealthComponent.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogHealthComponent, All, All);
+
 USGHealthComponent::USGHealthComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -26,4 +28,5 @@ void USGHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
 										 class AController* InstigatedBy, AActor* DamageCauser)
 {
 	Health -= Damage;
+	UE_LOG(LogHealthComponent, Display, TEXT("Taken damage: %f"), Damage);
 }
