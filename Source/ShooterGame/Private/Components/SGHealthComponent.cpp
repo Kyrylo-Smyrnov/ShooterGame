@@ -14,10 +14,16 @@ float USGHealthComponent::GetHealth() const
 	return Health;
 }
 
+bool USGHealthComponent::IsDead() const
+{
+	return Health <= 0.0f;
+}
+
 void USGHealthComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	Health = MaxHealth;
+	OnHealthChanged.Broadcast(Health);
 
 	AActor* ComponentOwner = GetOwner();
 	if (ComponentOwner)
@@ -27,18 +33,12 @@ void USGHealthComponent::BeginPlay()
 void USGHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType,
 										 class AController* InstigatedBy, AActor* DamageCauser)
 {
-	Health -= Damage;
-	UE_LOG(LogHealthComponent, Display, TEXT("Taken damage: %f"), Damage);
-
-	if(DamageType)
-	{
-		if(DamageType->IsA<USGFireDamageType>())
-		{
-			UE_LOG(LogHealthComponent, Display, TEXT("Damaged by fire."));
-		}
-		else if(DamageType->IsA<USGIceDamageType>())
-		{
-			UE_LOG(LogHealthComponent, Display, TEXT("Damaged by ice."));
-		}
-	}
+	if(Damage <= 0.0f || IsDead())
+		return;
+	
+	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+	OnHealthChanged.Broadcast(Health);
+	
+	if(IsDead())
+		OnDeath.Broadcast();
 }

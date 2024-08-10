@@ -2,6 +2,8 @@
 
 #include "Player/SGBaseCharacter.h"
 
+DEFINE_LOG_CATEGORY_STATIC(LogBaseCharacter, All, All);
+
 ASGBaseCharacter::ASGBaseCharacter(const FObjectInitializer& ObjInit)
 	: Super(ObjInit.SetDefaultSubobjectClass<USGCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
@@ -23,8 +25,6 @@ ASGBaseCharacter::ASGBaseCharacter(const FObjectInitializer& ObjInit)
 void ASGBaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	const auto Health = HealthComponent->GetHealth();
-	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }
 
 void ASGBaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -69,6 +69,11 @@ void ASGBaseCharacter::BeginPlay()
 
 	check(HealthComponent);
 	check(HealthTextComponent);
+	check(GetCharacterMovement());
+
+	OnHealthChanged(HealthComponent->GetHealth());
+	HealthComponent->OnDeath.AddUObject(this, &ASGBaseCharacter::OnDeath);
+	HealthComponent->OnHealthChanged.AddUObject(this, &ASGBaseCharacter::OnHealthChanged);
 }
 
 void ASGBaseCharacter::MoveForward(float Amount)
@@ -106,4 +111,17 @@ void ASGBaseCharacter::OnBeginSprint()
 void ASGBaseCharacter::OnEndSprint()
 {
 	WantToSprint = false;
+}
+
+void ASGBaseCharacter::OnDeath()
+{
+	UE_LOG(LogBaseCharacter, Display, TEXT("Character %s is dead."), *GetName());
+	PlayAnimMontage(DeathAnimMontage);
+	GetCharacterMovement()->DisableMovement();
+	SetLifeSpan(5.0f);
+}
+
+void ASGBaseCharacter::OnHealthChanged(float Health)
+{
+	HealthTextComponent->SetText(FText::FromString(FString::Printf(TEXT("%.0f"), Health)));
 }

@@ -7,11 +7,10 @@
 #include "SGIceDamageType.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
 class SHOOTERGAME_API USGIceDamageType : public UDamageType
 {
 	GENERATED_BODY()
-	
 };

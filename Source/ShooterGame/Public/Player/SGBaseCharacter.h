@@ -45,6 +45,9 @@ class SHOOTERGAME_API ASGBaseCharacter : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components")
 	UTextRenderComponent* HealthTextComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* DeathAnimMontage;
+
   private:
 	void MoveForward(float Amount);
 	void MoveRight(float Amount);
@@ -54,6 +57,9 @@ class SHOOTERGAME_API ASGBaseCharacter : public ACharacter
 
 	void OnBeginSprint();
 	void OnEndSprint();
+
+	void OnDeath();
+	void OnHealthChanged(float Health);
 
 	bool IsMovingForward = false;
 	bool WantToSprint = false;

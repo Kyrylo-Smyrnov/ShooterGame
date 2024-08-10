@@ -4,9 +4,10 @@
 
 #include "Components/ActorComponent.h"
 #include "CoreMinimal.h"
-#include "Dev/SGIceDamageType.h"
-#include "Dev/SGFireDamageType.h"
 #include "SGHealthComponent.generated.h"
+
+DECLARE_MULTICAST_DELEGATE(FOnDeath);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, float);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class SHOOTERGAME_API USGHealthComponent : public UActorComponent
@@ -16,7 +17,13 @@ class SHOOTERGAME_API USGHealthComponent : public UActorComponent
   public:
 	USGHealthComponent();
 
+	UFUNCTION(BlueprintCallable)
+	bool IsDead() const;
+
 	float GetHealth() const;
+
+	FOnDeath OnDeath;
+	FOnHealthChanged OnHealthChanged;
 
   protected:
 	virtual void BeginPlay() override;
