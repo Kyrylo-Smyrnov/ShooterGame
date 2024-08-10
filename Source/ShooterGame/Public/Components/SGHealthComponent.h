@@ -4,6 +4,8 @@
 
 #include "Components/ActorComponent.h"
 #include "CoreMinimal.h"
+#include "Dev/SGIceDamageType.h"
+#include "Dev/SGFireDamageType.h"
 #include "SGHealthComponent.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))

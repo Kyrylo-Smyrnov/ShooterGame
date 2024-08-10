@@ -29,4 +29,16 @@ void USGHealthComponent::OnTakeAnyDamage(AActor* DamagedActor, float Damage, con
 {
 	Health -= Damage;
 	UE_LOG(LogHealthComponent, Display, TEXT("Taken damage: %f"), Damage);
+
+	if(DamageType)
+	{
+		if(DamageType->IsA<USGFireDamageType>())
+		{
+			UE_LOG(LogHealthComponent, Display, TEXT("Damaged by fire."));
+		}
+		else if(DamageType->IsA<USGIceDamageType>())
+		{
+			UE_LOG(LogHealthComponent, Display, TEXT("Damaged by ice."));
+		}
+	}
 }
