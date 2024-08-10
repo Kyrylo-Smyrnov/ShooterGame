@@ -31,10 +31,29 @@ class SHOOTERGAME_API USGHealthComponent : public UActorComponent
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, meta = (ClampMin = 1.0f, ClampMax = 100.0f), Category = "Health");
 	float MaxHealth = 100.0f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AutoHeal")
+	bool IsAutoHealEnabled = true;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AutoHeal",
+			  meta = (EditCondition = "IsAutoHealEnabled"));
+	float AutoHealDelay = 3.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AutoHeal",
+			  meta = (EditCondition = "IsAutoHealEnabled"));
+	float AutoHealRate = 1.0f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "AutoHeal",
+			  meta = (EditCondition = "IsAutoHealEnabled"));
+	float AutoHealAmount = 5.0f;
+
   private:
 	UFUNCTION()
 	void OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType,
 						 class AController* InstigatedBy, AActor* DamageCauser);
 
+	void SetHealth(float NewHealth);
+	void AutoHeal();
+
+	FTimerHandle AutoHealTimerHandle;
 	float Health = 0.0f;
 };
