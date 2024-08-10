@@ -119,6 +119,9 @@ void ASGBaseCharacter::OnDeath()
 	PlayAnimMontage(DeathAnimMontage);
 	GetCharacterMovement()->DisableMovement();
 	SetLifeSpan(5.0f);
+
+	if(Controller)
+		Controller->ChangeState(NAME_Spectating);
 }
 
 void ASGBaseCharacter::OnHealthChanged(float Health)

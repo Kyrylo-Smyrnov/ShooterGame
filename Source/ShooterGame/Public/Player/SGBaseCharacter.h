@@ -7,6 +7,7 @@
 #include "Components/SGCharacterMovementComponent.h"
 #include "Components/SGHealthComponent.h"
 #include "Components/TextRenderComponent.h"
+#include "GameFramework/Controller.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/SpringArmComponent.h"
